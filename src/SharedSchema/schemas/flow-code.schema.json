@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flowring.dev/schema/flow-code-v1.json",
+  "title": "FlowRing FlowCode",
+  "description": "Flow Code 导出格式：Snapshot + JSON Patch + Vector Clock + AES-256-GCM 加密。",
+  "type": "object",
+  "required": ["formatVersion", "vectorClock", "snapshot", "crypto"],
+  "properties": {
+    "formatVersion": { "type": "string", "pattern": "^\\d+\\.\\d+$", "const": "1.0" },
+    "vectorClock":   { "type": "object", "additionalProperties": { "type": "integer", "minimum": 0 } },
+    "snapshot": {
+      "type": "object",
+      "required": ["profileId", "payload"],
+      "properties": {
+        "profileId": { "type": "string", "pattern": "^[a-z0-9-]{3,64}$" },
+        "payload":   { "type": "string", "description": "JSON Patch 文本（明文）" }
+      }
+    },
+    "crypto": {
+      "type": "object",
+      "required": ["algorithm", "kdf", "iterations", "salt", "nonce", "cipherText", "authTag"],
+      "properties": {
+        "algorithm": { "const": "AES-256-GCM" },
+        "kdf":       { "const": "PBKDF2-SHA256" },
+        "iterations":{ "type": "integer", "minimum": 100000 },
+        "salt":      { "type": "string", "description": "Base64" },
+        "nonce":     { "type": "string", "description": "Base64, 12 bytes" },
+        "cipherText":{ "type": "string", "description": "Base64" },
+        "authTag":   { "type": "string", "description": "Base64, 16 bytes" }
+      }
+    }
+  }
+}

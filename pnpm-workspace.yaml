@@ -1,0 +1,8 @@
+# Flow Ring monorepo 工作区定义。
+packages:
+  - "packages/*"
+
+# pnpm 11 安全机制：默认拒绝带 install script 的依赖（esbuild 等）。
+# 显式 allow esbuild 跑 install script，否则 pnpm build 会报 ERR_PNPM_IGNORED_BUILDS。
+allowBuilds:
+  esbuild: true

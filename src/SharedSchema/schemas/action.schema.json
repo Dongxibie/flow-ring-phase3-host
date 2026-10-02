@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flowring.dev/schema/action-v1.json",
+  "title": "FlowRing ActionDef",
+  "description": "Action 定义。Kind 决定 payload 类型。UI 相关字段（icon / color / position / animation）由 Ring 层负责，不在此出现。",
+  "type": "object",
+  "required": ["id", "kind", "displayName", "permissionTier", "payload"],
+  "properties": {
+    "id":            { "type": "string", "pattern": "^[a-z0-9.-]{1,64}$" },
+    "kind":          { "enum": ["Keyboard", "System", "Application", "AI", "Workflow"] },
+    "displayName":   { "type": "string", "minLength": 1, "maxLength": 64 },
+    "permissionTier":{ "enum": ["Safe", "Normal", "Dangerous"] },
+    "tags":          { "type": "array", "items": { "type": "string" } },
+    "payload": {
+      "oneOf": [
+        { "$ref": "#/$defs/keyboardPayload" },
+        { "$ref": "#/$defs/systemPayload" },
+        { "$ref": "#/$defs/applicationPayload" },
+        { "$ref": "#/$defs/aiPayload" },
+        { "$ref": "#/$defs/workflowPayload" }
+      ]
+    }
+  },
+  "$defs": {
+    "keyboardPayload": {
+      "type": "object",
+      "required": ["keys"],
+      "properties": {
+        "keys":      { "type": "string", "minLength": 1, "maxLength": 256 },
+        "modifiers": { "type": "integer", "minimum": 0, "maximum": 15 }
+      }
+    },
+    "systemPayload": {
+      "type": "object",
+      "required": ["op"],
+      "properties": {
+        "op":  { "enum": ["screenshot", "volumeUp", "volumeDown", "volumeMute", "minimizeWindow", "maximizeWindow", "closeWindow"] },
+        "args":{ "type": "object", "additionalProperties": true }
+      }
+    },
+    "applicationPayload": {
+      "type": "object",
+      "required": ["processName", "command"],
+      "properties": {
+        "processName": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "command":     { "type": "string", "minLength": 1, "maxLength": 256 }
+      }
+    },
+    "aiPayload": {
+      "type": "object",
+      "required": ["promptTemplate", "model"],
+      "properties": {
+        "promptTemplate": { "type": "string", "minLength": 1, "maxLength": 4096 },
+        "model": {
+          "type": "object",
+          "required": ["provider", "name"],
+          "properties": {
+            "provider": { "type": "string" },
+            "name":     { "type": "string" }
+          }
+        }
+      }
+    },
+    "workflowPayload": {
+      "type": "object",
+      "required": ["steps"],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>FlowRing.RingCore</RootNamespace>
+    <AssemblyName>FlowRing.RingCore</AssemblyName>
+    <Description>RingCore: OS 无关的纯逻辑核心（Ring 图、方向计算、状态机、Action 调度）。禁止引用 OS API。</Description>
+  </PropertyGroup>
+</Project>

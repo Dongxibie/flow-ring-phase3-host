@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>FlowRing.DesktopBridge</RootNamespace>
+    <AssemblyName>FlowRing.DesktopBridge</AssemblyName>
+    <Description>DesktopBridge: 唯一的 OS 隔离层。所有 Win32 P/Invoke 都必须在本模块内，禁止散落。</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RingCore\RingCore.csproj" />
+  </ItemGroup>
+</Project>

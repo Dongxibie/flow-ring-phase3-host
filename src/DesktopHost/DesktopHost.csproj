@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>FlowRing.DesktopHost</RootNamespace>
+    <AssemblyName>FlowRing.DesktopHost</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Description>DesktopHost: 进程入口 + 系统托盘 + WebView2 宿主 + IPC。</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RingCore\RingCore.csproj" />
+    <ProjectReference Include="..\DesktopBridge\DesktopBridge.csproj" />
+    <ProjectReference Include="..\RingProtocol\RingProtocol.csproj" />
+    <ProjectReference Include="..\SharedSchema\SharedSchema.csproj" />
+  </ItemGroup>
+</Project>

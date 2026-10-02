@@ -1,0 +1,23 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- 共享测试框架 -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageVersion Include="xunit" Version="2.9.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.1" />
+    <!-- WebView2 / 序列化 -->
+    <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.2792.45" />
+    <PackageVersion Include="System.Text.Json" Version="8.0.5" />
+    <!-- 加密（FlowCode AES-256-GCM 用） -->
+    <PackageVersion Include="System.Security.Cryptography.Algorithms" Version="4.3.1" />
+    <PackageVersion Include="System.Security.Cryptography.Primitives" Version="4.3.1" />
+    <!-- 日志 -->
+    <PackageVersion Include="Microsoft.Extensions.Logging" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.2" />
+  </ItemGroup>
+</Project>

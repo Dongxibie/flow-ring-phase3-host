@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flowring.dev/schema/ring-node-v1.json",
+  "title": "FlowRing RingNode",
+  "description": "Ring 图节点。最大深度 3 级（含 Root）。",
+  "type": "object",
+  "required": ["id", "profileId", "slots"],
+  "properties": {
+    "id":           { "type": "string", "pattern": "^[a-zA-Z0-9_-]{1,64}$" },
+    "profileId":    { "type": "string", "pattern": "^[a-z0-9-]{3,64}$" },
+    "parentRingId": { "type": ["string", "null"] },
+    "depth":        { "type": "integer", "minimum": 0, "maximum": 3 },
+    "slots": {
+      "type": "object",
+      "minProperties": 0,
+      "maxProperties": 8,
+      "additionalProperties": { "$ref": "#/$defs/ringSlot" }
+    }
+  },
+  "$defs": {
+    "ringSlot": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "direction", "actionRef"],
+          "properties": {
+            "kind":      { "const": "action" },
+            "direction": { "$ref": "#/$defs/direction" },
+            "actionRef": { "type": "string", "pattern": "^[a-z0-9.-]{1,64}$" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["kind", "direction", "childRingId"],
+          "properties": {
+            "kind":        { "const": "childRing" },
+            "direction":   { "$ref": "#/$defs/direction" },
+            "childRingId": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "direction": {
+      "enum": ["Top", "TopRight", "Right", "BottomRight", "Bottom", "BottomLeft", "Left", "TopLeft"]
+    }
+  }
+}

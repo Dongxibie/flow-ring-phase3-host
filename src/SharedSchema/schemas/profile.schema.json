@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://flowring.dev/schema/profile-v1.json",
+  "title": "FlowRing Profile",
+  "description": "FlowRing Profile 持久化格式（v1）。",
+  "type": "object",
+  "required": ["metadata", "ringGraph", "actionRefs", "contextRules"],
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["id", "name", "version", "schemaVersion", "createdAt", "updatedAt", "checksum"],
+      "properties": {
+        "id":            { "type": "string", "pattern": "^[a-z0-9-]{3,64}$" },
+        "name":          { "type": "string", "minLength": 1, "maxLength": 64 },
+        "version":       { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+        "schemaVersion": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+        "createdAt":     { "type": "string", "format": "date-time" },
+        "updatedAt":     { "type": "string", "format": "date-time" },
+        "checksum":      { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "tags":          { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "ringGraph": {
+      "type": "object",
+      "required": ["rootId", "nodes"],
+      "properties": {
+        "rootId": { "type": "string" },
+        "nodes": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/ringNode" }
+        }
+      }
+    },
+    "actionRefs": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "contextRules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "pattern", "profileId"],
+        "properties": {
+          "kind":     { "enum": ["processName", "windowTitle", "windowClass", "regex"] },
+          "pattern":  { "type": "string", "minLength": 1, "maxLength": 256 },
+          "profileId":{ "type": "string", "pattern": "^[a-z0-9-]{3,64}$" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "ringNode": {
+      "type": "object",
+      "required": ["id", "profileId", "slots"],
+      "properties": {
+        "id":           { "type": "string" },
+        "profileId":    { "type": "string" },
+        "parentRingId": { "type": ["string", "null"] },
+        "slots": {
+          "type": "object",
+          "additionalProperties": { "$ref": "#/$defs/ringSlot" }
+        }
+      }
+    },
+    "ringSlot": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["kind", "direction", "actionRef"],
+          "properties": {
+            "kind":      { "const": "action" },
+            "direction": { "$ref": "#/$defs/direction" },
+            "actionRef": { "type": "string" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["kind", "direction", "childRingId"],
+          "properties": {
+            "kind":        { "const": "childRing" },
+            "direction":   { "$ref": "#/$defs/direction" },
+            "childRingId": { "type": "string" }
+          }
+        }
+      ]
+    },
+    "direction": {
+      "enum": ["Top", "TopRight", "Right", "BottomRight", "Bottom", "BottomLeft", "Left", "TopLeft", "Center"]
+    }
+  }
+}

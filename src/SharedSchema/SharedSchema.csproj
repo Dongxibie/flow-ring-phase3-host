@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>FlowRing.SharedSchema</RootNamespace>
+    <AssemblyName>FlowRing.SharedSchema</AssemblyName>
+    <Description>SharedSchema: JSON Schema 仓库。Profile / Ring / Action / FlowCode 的权威 schema。</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="schemas\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>schemas\%(Filename)%(Extension)</TargetPath>
+    </None>
+  </ItemGroup>
+</Project>

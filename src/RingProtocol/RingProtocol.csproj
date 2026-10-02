@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>FlowRing.RingProtocol</RootNamespace>
+    <AssemblyName>FlowRing.RingProtocol</AssemblyName>
+    <Description>RingProtocol: C# 与 TS 双向协议定义。是两侧共享的唯一类型来源。</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RingCore\RingCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ts\src\**\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>ts\%(RecursiveDir)%(Filename)%(Extension)</TargetPath>
+    </None>
+  </ItemGroup>
+</Project>
