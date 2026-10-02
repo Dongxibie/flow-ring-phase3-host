@@ -1,10 +1,9 @@
-using FlowRing.DesktopHost.Tray;
+using FlowRing.DesktopHost.Host;
 
 namespace FlowRing.DesktopHost;
 
 /// <summary>
-/// DesktopHost 入口。MVP 仅初始化系统托盘并阻塞主线程；
-/// Phase 3 起补充：WebView2 宿主 + Named Pipe 服务端 + 协议路由 + 启动引导对话框。
+/// DesktopHost 入口。MVP 仅初始化系统托盘 + WebView2 + Bridge Pipe。
 /// </summary>
 internal static class Program
 {
@@ -14,10 +13,30 @@ internal static class Program
         Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
         Application.SetCompatibleTextRenderingDefault(false);
 
-        using var tray = new TrayIcon();
-        tray.Initialize();
+        var controller = new HostController();
+        using var cts = new CancellationTokenSource();
+        Application.ApplicationExit += (_, _) => cts.Cancel();
 
-        Application.Run();
+        var startTask = controller.StartAsync(cts.Token);
+
+        try
+        {
+            Application.Run();
+        }
+        finally
+        {
+            controller.Dispose();
+        }
+
+        try
+        {
+            startTask.GetAwaiter().GetResult();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Host 启动失败：{ex.Message}");
+            return 1;
+        }
         return 0;
     }
 }
